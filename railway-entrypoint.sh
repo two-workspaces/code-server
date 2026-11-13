@@ -42,10 +42,12 @@ fi
 ( while sleep 900; do nice -n 19 drop-file-cache "$H" /tmp || true; done ) &
 
 echo "code-server on port $PORT, opening $WORKSPACE"
-# The image's entrypoint (fixuid, ~/entrypoint.d scripts, dumb-init) as coder.
+# The image's entrypoint (fixuid, startup scripts, dumb-init) as coder. Its
+# ENTRYPOINTD is /entrypoint.d, outside the volume; point it at ~/entrypoint.d so
+# setup scripts (apt installs, say) survive redeploys and rerun on every start.
 # Updates come with a new image, so the in-app update check is off.
 exec setpriv --reuid=coder --regid=coder --init-groups \
-  env HOME="$H" USER=coder \
+  env HOME="$H" USER=coder ENTRYPOINTD="$H/entrypoint.d" \
   /usr/bin/entrypoint.sh \
   --bind-addr "0.0.0.0:$PORT" \
   --auth password \
