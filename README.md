@@ -35,11 +35,11 @@ code-server needs a long-running server with storage that survives restarts, a p
 
 ### Implementation Details
 
-- **Tested on Railway:** PENDING
+- **Tested on Railway:** the password login (a wrong password is refused, and the editor's WebSocket gets 401 without a session and 101 with one); Node.js 26 with npm and npx, Python 3.13 with pip and venv, gcc 14 and sudo in the terminal; installing extensions from Open VSX; a redeploy kept the extensions and projects; an `npm install` of TypeScript, ESLint, Vite and React plus a TypeScript compile at 0.5 GB of memory, with no out-of-memory kills.
 - **Extensions** come from [Open VSX](https://open-vsx.org), the open marketplace code-server uses. Most popular extensions are there; a few Microsoft-only ones (Remote, Live Share, the C# Dev Kit) are not.
 - **What persists:** everything under `/home/coder`. Packages installed with `sudo apt-get install` are gone after a redeploy, since they live outside the volume. Put setup commands in an executable script in `~/entrypoint.d` to rerun them on every start.
 - **Security:** the password protects a terminal with sudo. Keep it strong, and change it by editing `PASSWORD` (the service redeploys).
-- **Memory:** PENDING
+- **Memory:** about 200 MB idle. It runs on the Free plan's 0.5 GB for editing and light builds; language servers for big projects and heavy builds want 1 to 2 GB. Railway counts the kernel's file cache as memory, so the template drops the cache of your home folder every 15 minutes.
 - **Updates:** a new code-server version comes with an update of this template; the in-app update check is off.
 - **Image:** `ghcr.io/two-workspaces/code-server`, built from this repository's Dockerfile on `codercom/code-server:4.145.2`.
 
