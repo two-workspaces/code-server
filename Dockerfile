@@ -2,7 +2,7 @@
 # projects need on a dev box, and an entrypoint that maps it onto Railway's port and volume.
 FROM node:26.13.1-trixie-slim AS node
 
-FROM codercom/code-server:4.145.2
+FROM codercom/code-server:4.146.0
 USER root
 # Compilers, Python and a few CLI tools. Anything else installs in a terminal with
 # `sudo apt-get install`, but only /home/coder survives a redeploy.
